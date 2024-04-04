@@ -1,7 +1,36 @@
-#!/usr/bin/bash
-FILE=$1
-while read NUMBERS;
-do
-         factors=($(factor $NUMBERS))
-         echo "$NUMBERS=$(($NUMBERS/${factors[1]}))*${factors[1]}"
-done < $FILE
+#!/usr/bin/python3
+from sys import argv
+import math
+"""Factorize as many nos as possible into a product of two smaller nos"""
+
+
+def factory(num):
+    """gets the factors of a number"""
+    if num % 2 == 0:
+        n = 2
+        print("{}={}*{}".format(num, int(num//n), n))
+    else:
+        sq = int(math.sqrt(num)) + 1
+        for n in range(3, sq, +2):
+            if num % n == 0:
+                print("{}={}*{}".format(num, int(num//n), n))
+                return
+            if num % (sq + n) == 0:
+                print("{}={}*{}".format(num, sq + n, int(num//(sq + n))))
+                return
+            if num % (sq - n) == 0:
+                print("{}={}*{}".format(num, sq - 1, int(num//(sq - n))))
+                return
+
+
+def factors(filename):
+    """read_file and prints them out"""
+
+    with open(filename, encoding="utf-8") as my_file:
+        for n in my_file.readlines():
+            m = int(n)
+            result = factory(m)
+
+
+if __name__ == "__main__":
+    factors(argv[1])
